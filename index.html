@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Backend Developer — realReloadTime</title>
+  <meta name="description" content="Async FastAPI, PostgreSQL, Telegram-боты, RAG/ML. Разработка бэкенда и AI-интеграций под ключ.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --surface: #121820;
+      --surface-2: #1a2230;
+      --text: #e8edf5;
+      --muted: #93a0b5;
+      --accent: #4f8cff;
+      --accent-2: #36c9a8;
+      --border: rgba(255,255,255,.08);
+      --radius: 16px;
+      --shadow: 0 20px 60px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Manrope", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(circle at 50% 20%, black, transparent 75%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 48px 20px 80px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 24px;
+      padding: 40px;
+      background: linear-gradient(145deg, rgba(79,140,255,.12), rgba(54,201,168,.08));
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) + 8px);
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(79,140,255,.15);
+      color: #b9d2ff;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .lead {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    section { margin-bottom: 40px; }
+
+    .section-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--accent-2);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .card ul {
+      margin-top: 12px;
+      padding-left: 18px;
+    }
+
+    .card li { margin-bottom: 6px; }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: #c7d2e5;
+      border: 1px solid var(--border);
+    }
+
+    .stack-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .stack-item {
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: #d7e0ef;
+      font-weight: 500;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .contact-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .contact-item a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .contact-item a:hover { text-decoration: underline; }
+
+    .repos {
+      display: grid;
+      gap: 12px;
+    }
+
+    .repo-link {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color .15s ease;
+    }
+
+    .repo-link:hover {
+      border-color: rgba(79,140,255,.45);
+    }
+
+    .repo-link span:last-child {
+      color: var(--muted);
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .note {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(54,201,168,.08);
+      border: 1px solid rgba(54,201,168,.2);
+      color: #b7efe2;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="wrap">
+    <header class="hero">
+      <div class="badge">Доступен к проектам · Python Backend</div>
+      <h1>Разработка async-бэкенда и AI-интеграций</h1>
+      <p class="lead">
+        Python-разработчик с опытом production-проектов. Сооснователь платформы
+        <a href="https://недвижь.рф" style="color:#9ec1ff">недвижь.рф</a> — региональный маркетплейс недвижимости в Кузбассе.
+        Делаю FastAPI-сервисы, Telegram-ботов, RAG-ассистентов и интеграции с платёжными системами.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://t.me/YOUR_TELEGRAM_USERNAME">Написать в Telegram</a>
+        <a class="btn btn-secondary" href="https://github.com/realReloadTime">GitHub</a>
+        <a class="btn btn-secondary" href="mailto:YOUR_EMAIL@example.com">Email</a>
+      </div>
+      <p class="note">Замените YOUR_TELEGRAM_USERNAME и YOUR_EMAIL@example.com на свои контакты перед публикацией.</p>
+    </header>
+
+    <section>
+      <div class="section-title">Кейсы</div>
+      <h2>Что уже в продакшене</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>недвижь.рф — маркетплейс недвижимости</h3>
+          <p>Full-stack платформа: web, mobile, async API. Каталог объявлений, чаты, модерация, подписки и платежи.</p>
+          <ul>
+            <li>30+ API-модулей на FastAPI (async SQLAlchemy 2.0)</li>
+            <li>PostgreSQL + pgvector, гибридный поиск (FTS + embeddings)</li>
+            <li>WebSocket-чат, T-Bank acquiring, JWT/OAuth</li>
+            <li>36+ автотестов, Docker, blue-green deploy</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">FastAPI</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Vue</span>
+            <span class="tag">Flutter</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Pettrek — CRM для зообизнеса</h3>
+          <p>Экосистема для владельцев питомцев и ветклиник: запись, учёт клиентов, финансовая аналитика, рассылки.</p>
+          <ul>
+            <li>REST API на FastAPI + Alembic-миграции</li>
+            <li>Роли, авторизация, бизнес-логика CRM</li>
+            <li>ML-модуль распознавания текста (PyTorch)</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">FastAPI</span>
+            <span class="tag">CRM</span>
+            <span class="tag">PyTorch</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>AI-ассистенты и RAG-боты</h3>
+          <p>Telegram-боты с базой знаний: ответы по PDF/регламентам, GigaChat/OpenAI/Ollama, гибридный поиск.</p>
+          <ul>
+            <li>LangChain + Chroma + sentence-transformers</li>
+            <li>Индексация PDF, reranking, контекстные ответы</li>
+            <li>Open-source showcase: telegram-rag-bot</li>
+          </ul>
+          <div class="tags">
+            <span class="tag">RAG</span>
+            <span class="tag">Telegram</span>
+            <span class="tag">LangChain</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">Open Source</div>
+      <h2>Showcase-репозитории</h2>
+      <div class="repos">
+        <a class="repo-link" href="https://github.com/realReloadTime/fastapi-production-starter">
+          <span><strong>fastapi-production-starter</strong> — production-шаблон async API</span>
+          <span>GitHub →</span>
+        </a>
+        <a class="repo-link" href="https://github.com/realReloadTime/telegram-rag-bot">
+          <span><strong>telegram-rag-bot</strong> — RAG-бот по документам</span>
+          <span>GitHub →</span>
+        </a>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">Стек</div>
+      <h2>Технологии</h2>
+      <div class="stack-grid">
+        <div class="stack-item">Python 3.12</div>
+        <div class="stack-item">FastAPI</div>
+        <div class="stack-item">SQLAlchemy 2.0 async</div>
+        <div class="stack-item">PostgreSQL / asyncpg</div>
+        <div class="stack-item">Alembic</div>
+        <div class="stack-item">Pydantic v2</div>
+        <div class="stack-item">JWT / OAuth2</div>
+        <div class="stack-item">WebSockets</div>
+        <div class="stack-item">Docker</div>
+        <div class="stack-item">pytest</div>
+        <div class="stack-item">Telegram bots</div>
+        <div class="stack-item">LangChain / RAG</div>
+        <div class="stack-item">pgvector / embeddings</div>
+        <div class="stack-item">PyTorch (CV/OCR)</div>
+        <div class="stack-item">aiohttp / httpx</div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">Услуги</div>
+      <h2>Чем могу помочь</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>Backend под ключ</h3>
+          <p>REST API, авторизация, CRUD, интеграции, деплой. От MVP до доработки существующего проекта.</p>
+        </article>
+        <article class="card">
+          <h3>Telegram / VK боты</h3>
+          <p>Заявки, запись, уведомления, админ-панель, интеграция с CRM и Google Sheets.</p>
+        </article>
+        <article class="card">
+          <h3>AI и RAG</h3>
+          <p>Ассистент по документам компании, FAQ-бот, семантический поиск, подключение LLM.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">Контакты</div>
+      <h2>Связаться</h2>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <strong>Telegram</strong>
+          <a href="https://t.me/YOUR_TELEGRAM_USERNAME">@YOUR_TELEGRAM_USERNAME</a>
+        </div>
+        <div class="contact-item">
+          <strong>Email</strong>
+          <a href="mailto:YOUR_EMAIL@example.com">YOUR_EMAIL@example.com</a>
+        </div>
+        <div class="contact-item">
+          <strong>GitHub</strong>
+          <a href="https://github.com/realReloadTime">github.com/realReloadTime</a>
+        </div>
+        <div class="contact-item">
+          <strong>Kwork</strong>
+          <a href="https://kwork.ru/user/YOUR_KWORK_USERNAME">kwork.ru/user/YOUR_KWORK_USERNAME</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 · Python Backend Developer · Кемерово / удалённо
+    </footer>
+  </div>
+</body>
+</html>
