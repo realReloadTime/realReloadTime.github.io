@@ -3,426 +3,602 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python Backend Developer — realReloadTime</title>
-  <meta name="description" content="Async FastAPI, PostgreSQL, Telegram-боты, RAG/ML. Разработка бэкенда и AI-интеграций под ключ.">
+  <title>Максим · Python backend</title>
+  <meta name="description" content="Async FastAPI, PostgreSQL, боты, RAG. Бэкенд под ключ — от MVP до production.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0f14;
-      --surface: #121820;
-      --surface-2: #1a2230;
-      --text: #e8edf5;
-      --muted: #93a0b5;
-      --accent: #4f8cff;
-      --accent-2: #36c9a8;
-      --border: rgba(255,255,255,.08);
-      --radius: 16px;
-      --shadow: 0 20px 60px rgba(0,0,0,.35);
+      --paper: #f3efe6;
+      --paper-2: #ebe5d9;
+      --ink: #14110f;
+      --ink-soft: #4a433c;
+      --rust: #a33b1e;
+      --rust-light: #f0ddd6;
+      --line: #c9bfb0;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --serif: "Literata", Georgia, serif;
+      --sans: "Onest", system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: "Manrope", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+      font-size: 17px;
     }
 
-    .bg-grid {
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: radial-gradient(circle at 50% 20%, black, transparent 75%);
+      opacity: 0.35;
       pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
       z-index: 0;
     }
 
-    .wrap {
+    .page {
       position: relative;
       z-index: 1;
-      max-width: 1040px;
+      max-width: 1080px;
       margin: 0 auto;
-      padding: 48px 20px 80px;
+      padding: 0 24px 72px;
     }
 
-    .hero {
-      display: grid;
-      gap: 24px;
-      padding: 40px;
-      background: linear-gradient(145deg, rgba(79,140,255,.12), rgba(54,201,168,.08));
-      border: 1px solid var(--border);
-      border-radius: calc(var(--radius) + 8px);
-      box-shadow: var(--shadow);
-      margin-bottom: 32px;
+    /* masthead */
+    .masthead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding: 28px 0 20px;
+      border-bottom: 2px solid var(--ink);
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      width: fit-content;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(79,140,255,.15);
-      color: #b9d2ff;
-      font-size: 13px;
-      font-weight: 600;
+    .masthead a {
+      color: var(--ink);
+      text-decoration: none;
     }
 
-    h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-    }
+    .masthead a:hover { color: var(--rust); }
 
-    .lead {
-      max-width: 720px;
-      color: var(--muted);
-      font-size: 1.05rem;
-    }
-
-    .hero-actions {
+    .masthead-nav {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 18px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: transform .15s ease, opacity .15s ease;
-    }
-
-    .btn:hover { transform: translateY(-1px); }
-
-    .btn-primary {
-      background: var(--accent);
-      color: white;
-    }
-
-    .btn-secondary {
-      background: var(--surface-2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    section { margin-bottom: 40px; }
-
-    .section-title {
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      color: var(--accent-2);
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
-
-    h2 {
-      font-size: 1.75rem;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 16px;
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
+    /* hero */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      padding: 56px 0 48px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .card h3 {
-      font-size: 1.15rem;
-      margin-bottom: 8px;
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5.5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
     }
 
-    .card p, .card li {
-      color: var(--muted);
-      font-size: .95rem;
+    .hero h1 em {
+      font-style: normal;
+      color: var(--rust);
     }
 
-    .card ul {
-      margin-top: 12px;
-      padding-left: 18px;
+    .hero-lead {
+      max-width: 34em;
+      color: var(--ink-soft);
+      margin-bottom: 28px;
     }
 
-    .card li { margin-bottom: 6px; }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 14px;
+    .hero-lead a {
+      color: var(--ink);
+      text-underline-offset: 3px;
     }
 
-    .tag {
-      font-size: 12px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: var(--surface-2);
-      color: #c7d2e5;
-      border: 1px solid var(--border);
-    }
-
-    .stack-grid {
+    .cta-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
 
-    .stack-item {
-      padding: 10px 14px;
-      border-radius: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: #d7e0ef;
+    .cta {
+      display: inline-block;
+      padding: 11px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid var(--ink);
+      color: var(--ink);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .cta-primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .cta-primary:hover {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: #fff;
+    }
+
+    .cta:hover:not(.cta-primary) {
+      background: var(--paper-2);
+    }
+
+    .hero-aside {
+      align-self: end;
+    }
+
+    .fact-sheet {
+      border: 2px solid var(--ink);
+      padding: 0;
+      background: #fff;
+    }
+
+    .fact-sheet dt,
+    .fact-sheet dd {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .fact-sheet dt {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      background: var(--paper-2);
+    }
+
+    .fact-sheet dd {
+      font-size: 15px;
       font-weight: 500;
     }
 
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 14px;
+    .fact-sheet dt:last-of-type,
+    .fact-sheet dd:last-of-type {
+      border-bottom: none;
     }
 
-    .contact-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
+    /* sections */
+    .block {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--line);
     }
 
-    .contact-item strong {
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    .contact-item a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .contact-item a:hover { text-decoration: underline; }
-
-    .repos {
-      display: grid;
-      gap: 12px;
-    }
-
-    .repo-link {
+    .block-head {
       display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .block-num {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--rust);
+      flex-shrink: 0;
+    }
+
+    .block-title {
+      font-family: var(--serif);
+      font-size: 1.65rem;
+      font-weight: 600;
+    }
+
+    /* cases — not identical cards */
+    .case {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 20px 28px;
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .case:first-of-type { border-top: none; padding-top: 0; }
+
+    .case-index {
+      font-family: var(--mono);
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--line);
+      font-weight: 500;
+    }
+
+    .case.featured {
+      grid-template-columns: 1fr;
+      background: var(--rust-light);
+      margin: 0 -20px;
+      padding: 28px 20px;
+      border-top: 2px solid var(--rust);
+      border-bottom: 2px solid var(--rust);
+    }
+
+    .case.featured .case-index {
+      font-size: 13px;
+      color: var(--rust);
+      margin-bottom: 8px;
+    }
+
+    .case h3 {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .case p {
+      color: var(--ink-soft);
+      margin-bottom: 12px;
+      max-width: 52em;
+    }
+
+    .case ul {
+      margin-left: 1.1em;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    .case li { margin-bottom: 4px; }
+
+    .case-meta {
+      margin-top: 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    /* repos — typewriter list */
+    .repo-list {
+      list-style: none;
+      border: 2px solid var(--ink);
+      background: #fff;
+    }
+
+    .repo-list li {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .repo-list li:last-child { border-bottom: none; }
+
+    .repo-list a {
+      display: block;
       padding: 16px 18px;
-      border-radius: 14px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
+      color: var(--ink);
       text-decoration: none;
-      transition: border-color .15s ease;
+      transition: background 0.12s;
     }
 
-    .repo-link:hover {
-      border-color: rgba(79,140,255,.45);
+    .repo-list a:hover {
+      background: var(--paper-2);
     }
 
-    .repo-link span:last-child {
-      color: var(--muted);
+    .repo-list strong {
+      font-family: var(--mono);
       font-size: 14px;
-      white-space: nowrap;
+      font-weight: 500;
     }
+
+    .repo-list span {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+
+    /* stack — inventory block */
+    .inventory {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.9;
+      columns: 2;
+      column-gap: 32px;
+      background: var(--ink);
+      color: #e8e2d8;
+      padding: 24px 28px;
+    }
+
+    .inventory span::before {
+      content: "→ ";
+      color: var(--rust);
+    }
+
+    @media (max-width: 600px) {
+      .inventory { columns: 1; }
+    }
+
+    /* services — classified ads style */
+    .classified {
+      display: grid;
+      gap: 0;
+      border: 2px solid var(--ink);
+    }
+
+    .classified-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .classified-item:last-child { border-bottom: none; }
+
+    .classified-label {
+      padding: 18px 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: var(--paper-2);
+      border-right: 1px solid var(--line);
+      font-weight: 500;
+    }
+
+    .classified-body {
+      padding: 18px 20px;
+      font-size: 15px;
+      color: var(--ink-soft);
+    }
+
+    /* contact */
+    .contact-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 2px solid var(--ink);
+      background: #fff;
+    }
+
+    .contact-cell {
+      padding: 20px 16px;
+      border-right: 1px solid var(--line);
+    }
+
+    .contact-cell:last-child { border-right: none; }
+
+    .contact-cell strong {
+      display: block;
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    .contact-cell a {
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .contact-cell a:hover { color: var(--rust); }
 
     footer {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 14px;
-      text-align: center;
+      margin-top: 40px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--ink-soft);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .note {
-      margin-top: 12px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      background: rgba(54,201,168,.08);
-      border: 1px solid rgba(54,201,168,.2);
-      color: #b7efe2;
-      font-size: 14px;
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 28px; }
+      .hero-aside { order: -1; }
+      .classified-item { grid-template-columns: 1fr; }
+      .classified-label { border-right: none; border-bottom: 1px solid var(--line); }
+      .contact-strip { grid-template-columns: 1fr 1fr; }
+      .contact-cell:nth-child(2) { border-right: none; }
+      .contact-cell { border-bottom: 1px solid var(--line); }
+      .contact-cell:nth-last-child(-n+2) { border-bottom: none; }
+      .case { grid-template-columns: 48px 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .contact-strip { grid-template-columns: 1fr; }
+      .contact-cell { border-right: none !important; }
+      .masthead { flex-direction: column; align-items: flex-start; }
     }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="wrap">
-    <header class="hero">
-      <div class="badge">Доступен к проектам · Python Backend</div>
-      <h1>Разработка async-бэкенда и AI-интеграций</h1>
-      <p class="lead">
-        Python-разработчик с опытом production-проектов. Сооснователь платформы
-        <a href="https://недвижь.рф" style="color:#9ec1ff">недвижь.рф</a> — региональный маркетплейс недвижимости в Кузбассе.
-        Делаю FastAPI-сервисы, Telegram-ботов, RAG-ассистентов и интеграции с платёжными системами.
-      </p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="https://t.me/realReloadTime">Написать в Telegram</a>
-        <a class="btn btn-secondary" href="https://github.com/realReloadTime">GitHub</a>
-        <a class="btn btn-secondary" href="mailto:max.shilcko@yandex.ru">Email</a>
-      </div>
-      <p class="note">Замените realReloadTime и max.shilcko@yandex.ru на свои контакты перед публикацией.</p>
+  <div class="page">
+    <header class="masthead">
+      <span>Кемерово · удалённо</span>
+      <nav class="masthead-nav">
+        <a href="#work">работы</a>
+        <a href="#stack">стек</a>
+        <a href="#contact">контакт</a>
+        <a href="https://github.com/realReloadTime">github</a>
+      </nav>
     </header>
 
-    <section>
-      <div class="section-title">Кейсы</div>
-      <h2>Что уже в продакшене</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>недвижь.рф — маркетплейс недвижимости</h3>
-          <p>Full-stack платформа: web, mobile, async API. Каталог объявлений, чаты, модерация, подписки и платежи.</p>
-          <ul>
-            <li>30+ API-модулей на FastAPI (async SQLAlchemy 2.0)</li>
-            <li>PostgreSQL + pgvector, гибридный поиск (FTS + embeddings)</li>
-            <li>WebSocket-чат, T-Bank acquiring, JWT/OAuth</li>
-            <li>36+ автотестов, Docker, blue-green deploy</li>
-          </ul>
-          <div class="tags">
-            <span class="tag">FastAPI</span>
-            <span class="tag">PostgreSQL</span>
-            <span class="tag">Vue</span>
-            <span class="tag">Flutter</span>
-          </div>
-        </article>
+    <section class="hero">
+      <div>
+        <h1>Бэкенд, который <em>доживает</em> до продакшена</h1>
+        <p class="hero-lead">
+          Пишу async API на Python — не демо на YouTube, а сервисы с миграциями, тестами и деплоем.
+          Сооснователь <a href="https://недвижь.рф">недвижь.рф</a> (маркетплейс недвижимости, Кузбасс).
+          Беру заказы: FastAPI, боты, RAG, интеграции с оплатой.
+        </p>
+        <div class="cta-row">
+          <a class="cta cta-primary" href="https://t.me/realReloadTime">Telegram</a>
+          <a class="cta" href="mailto:max.shilcko@yandex.ru">Почта</a>
+          <a class="cta" href="https://kwork.ru/user/realReloadTime">Kwork</a>
+        </div>
+      </div>
+      <aside class="hero-aside">
+        <dl class="fact-sheet">
+          <dt>Фокус</dt>
+          <dd>Async FastAPI · PostgreSQL</dd>
+          <dt>Также</dt>
+          <dd>Telegram-боты · RAG · ML</dd>
+          <dt>Статус</dt>
+          <dd>Беру проекты, 25–35 ч/нед</dd>
+          <dt>От</dt>
+          <dd>5 000 ₽ · срок в КП</dd>
+        </dl>
+      </aside>
+    </section>
 
-        <article class="card">
+    <section class="block" id="work">
+      <div class="block-head">
+        <span class="block-num">01</span>
+        <h2 class="block-title">Что уже крутится в бою</h2>
+      </div>
+
+      <article class="case featured">
+        <div class="case-index">главный кейс</div>
+        <h3>недвижь.рф</h3>
+        <p>
+          Региональный маркетплейс недвижимости: каталог, чаты между покупателем и продавцом,
+          модерация, подписки, оплата через банк. Web + Flutter + один async-бэкенд.
+        </p>
+        <ul>
+          <li>30+ модулей API, SQLAlchemy 2.0, Alembic</li>
+          <li>Поиск: PostgreSQL FTS + pgvector (embeddings)</li>
+          <li>WebSocket-чат, T-Bank, JWT и OAuth</li>
+          <li>36+ pytest, Docker, blue-green</li>
+        </ul>
+        <p class="case-meta">FastAPI · PostgreSQL · Vue · Flutter</p>
+      </article>
+
+      <article class="case">
+        <div class="case-index">02</div>
+        <div>
           <h3>Pettrek — CRM для зообизнеса</h3>
-          <p>Экосистема для владельцев питомцев и ветклиник: запись, учёт клиентов, финансовая аналитика, рассылки.</p>
+          <p>Запись клиентов, учёт услуг, финансовая аналитика, рассылки. API для мобильного приложения владельцев питомцев.</p>
           <ul>
-            <li>REST API на FastAPI + Alembic-миграции</li>
-            <li>Роли, авторизация, бизнес-логика CRM</li>
-            <li>ML-модуль распознавания текста (PyTorch)</li>
+            <li>FastAPI, роли, миграции</li>
+            <li>PyTorch-модуль распознавания текста</li>
           </ul>
-          <div class="tags">
-            <span class="tag">FastAPI</span>
-            <span class="tag">CRM</span>
-            <span class="tag">PyTorch</span>
-          </div>
-        </article>
+          <p class="case-meta">github.com/arccapr/pettrek-app</p>
+        </div>
+      </article>
 
-        <article class="card">
-          <h3>AI-ассистенты и RAG-боты</h3>
-          <p>Telegram-боты с базой знаний: ответы по PDF/регламентам, GigaChat/OpenAI/Ollama, гибридный поиск.</p>
+      <article class="case">
+        <div class="case-index">03</div>
+        <div>
+          <h3>RAG и AI-боты</h3>
+          <p>Ассистенты по PDF и регламентам: индексация, гибридный поиск, ответы в Telegram. GigaChat, OpenAI, Ollama.</p>
           <ul>
-            <li>LangChain + Chroma + sentence-transformers</li>
-            <li>Индексация PDF, reranking, контекстные ответы</li>
-            <li>Open-source showcase: telegram-rag-bot</li>
+            <li>LangChain, Chroma, sentence-transformers</li>
+            <li>Open-source: <a href="https://github.com/realReloadTime/telegram-rag-bot">telegram-rag-bot</a></li>
           </ul>
-          <div class="tags">
-            <span class="tag">RAG</span>
-            <span class="tag">Telegram</span>
-            <span class="tag">LangChain</span>
-          </div>
-        </article>
+          <p class="case-meta">RAG · Telegram · LangChain</p>
+        </div>
+      </article>
+
+      <div class="block-head" style="margin-top: 40px; margin-bottom: 16px;">
+        <span class="block-num">→</span>
+        <h2 class="block-title" style="font-size: 1.1rem;">Репозитории для просмотра кода</h2>
+      </div>
+      <ul class="repo-list">
+        <li>
+          <a href="https://github.com/realReloadTime/fastapi-production-starter">
+            <strong>fastapi-production-starter</strong>
+            <span>Шаблон production API: auth, CRUD, Alembic, Docker, тесты</span>
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/realReloadTime/telegram-rag-bot">
+            <strong>telegram-rag-bot</strong>
+            <span>RAG-бот: PDF → Chroma → ответы в Telegram</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="block" id="stack">
+      <div class="block-head">
+        <span class="block-num">02</span>
+        <h2 class="block-title">Инструменты</h2>
+      </div>
+      <div class="inventory">
+        <span>Python 3.12</span><br>
+        <span>FastAPI · Pydantic v2</span><br>
+        <span>SQLAlchemy 2.0 async</span><br>
+        <span>PostgreSQL · asyncpg</span><br>
+        <span>Alembic · pgvector</span><br>
+        <span>JWT · OAuth2 · WebSockets</span><br>
+        <span>Docker · pytest</span><br>
+        <span>python-telegram-bot</span><br>
+        <span>LangChain · RAG · Chroma</span><br>
+        <span>PyTorch · httpx · aiohttp</span>
       </div>
     </section>
 
-    <section>
-      <div class="section-title">Open Source</div>
-      <h2>Showcase-репозитории</h2>
-      <div class="repos">
-        <a class="repo-link" href="https://github.com/realReloadTime/fastapi-production-starter">
-          <span><strong>fastapi-production-starter</strong> — production-шаблон async API</span>
-          <span>GitHub →</span>
-        </a>
-        <a class="repo-link" href="https://github.com/realReloadTime/telegram-rag-bot">
-          <span><strong>telegram-rag-bot</strong> — RAG-бот по документам</span>
-          <span>GitHub →</span>
-        </a>
+    <section class="block">
+      <div class="block-head">
+        <span class="block-num">03</span>
+        <h2 class="block-title">Что делаю на заказ</h2>
+      </div>
+      <div class="classified">
+        <div class="classified-item">
+          <div class="classified-label">API</div>
+          <div class="classified-body">REST под мобилку или админку: auth, CRUD, файлы, webhooks, Swagger. Доработка чужого FastAPI тоже ок.</div>
+        </div>
+        <div class="classified-item">
+          <div class="classified-label">Боты</div>
+          <div class="classified-body">Telegram/VK: заявки, запись, уведомления менеджерам, Google Sheets, простая админка.</div>
+        </div>
+        <div class="classified-item">
+          <div class="classified-label">AI</div>
+          <div class="classified-body">База знаний по вашим документам, FAQ-бот, семантический поиск, подключение LLM.</div>
+        </div>
       </div>
     </section>
 
-    <section>
-      <div class="section-title">Стек</div>
-      <h2>Технологии</h2>
-      <div class="stack-grid">
-        <div class="stack-item">Python 3.12</div>
-        <div class="stack-item">FastAPI</div>
-        <div class="stack-item">SQLAlchemy 2.0 async</div>
-        <div class="stack-item">PostgreSQL / asyncpg</div>
-        <div class="stack-item">Alembic</div>
-        <div class="stack-item">Pydantic v2</div>
-        <div class="stack-item">JWT / OAuth2</div>
-        <div class="stack-item">WebSockets</div>
-        <div class="stack-item">Docker</div>
-        <div class="stack-item">pytest</div>
-        <div class="stack-item">Telegram bots</div>
-        <div class="stack-item">LangChain / RAG</div>
-        <div class="stack-item">pgvector / embeddings</div>
-        <div class="stack-item">PyTorch (CV/OCR)</div>
-        <div class="stack-item">aiohttp / httpx</div>
+    <section class="block" id="contact">
+      <div class="block-head">
+        <span class="block-num">04</span>
+        <h2 class="block-title">Написать</h2>
       </div>
-    </section>
-
-    <section>
-      <div class="section-title">Услуги</div>
-      <h2>Чем могу помочь</h2>
-      <div class="cards">
-        <article class="card">
-          <h3>Backend под ключ</h3>
-          <p>REST API, авторизация, CRUD, интеграции, деплой. От MVP до доработки существующего проекта.</p>
-        </article>
-        <article class="card">
-          <h3>Telegram / VK боты</h3>
-          <p>Заявки, запись, уведомления, админ-панель, интеграция с CRM и Google Sheets.</p>
-        </article>
-        <article class="card">
-          <h3>AI и RAG</h3>
-          <p>Ассистент по документам компании, FAQ-бот, семантический поиск, подключение LLM.</p>
-        </article>
-      </div>
-    </section>
-
-    <section>
-      <div class="section-title">Контакты</div>
-      <h2>Связаться</h2>
-      <div class="contact-grid">
-        <div class="contact-item">
+      <div class="contact-strip">
+        <div class="contact-cell">
           <strong>Telegram</strong>
           <a href="https://t.me/realReloadTime">@realReloadTime</a>
         </div>
-        <div class="contact-item">
+        <div class="contact-cell">
           <strong>Email</strong>
           <a href="mailto:max.shilcko@yandex.ru">max.shilcko@yandex.ru</a>
         </div>
-        <div class="contact-item">
+        <div class="contact-cell">
           <strong>GitHub</strong>
-          <a href="https://github.com/realReloadTime">github.com/realReloadTime</a>
+          <a href="https://github.com/realReloadTime">realReloadTime</a>
         </div>
-        <div class="contact-item">
+        <div class="contact-cell">
           <strong>Kwork</strong>
-          <a href="https://kwork.ru/user/realReloadTime">kwork.ru/user/realReloadTime</a>
+          <a href="https://kwork.ru/user/realReloadTime">профиль</a>
         </div>
       </div>
     </section>
 
     <footer>
-      © 2026 · Python Backend Developer · Кемерово / удалённо
+      <span>© 2026</span>
+      <span>Отвечаю в Telegram быстрее, чем на почту</span>
     </footer>
   </div>
 </body>
