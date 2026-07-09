@@ -16,6 +16,8 @@
       --ink-soft: #4a433c;
       --rust: #a33b1e;
       --rust-light: #f0ddd6;
+      --sage: #dce8df;
+      --sage-ink: #2a4a35;
       --line: #c9bfb0;
       --mono: "IBM Plex Mono", ui-monospace, monospace;
       --serif: "Literata", Georgia, serif;
@@ -52,18 +54,36 @@
       padding: 0 24px 72px;
     }
 
-    /* masthead */
     .masthead {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: center;
       gap: 20px;
-      padding: 28px 0 20px;
+      padding: 24px 0 20px;
       border-bottom: 2px solid var(--ink);
       font-family: var(--mono);
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.08em;
+    }
+
+    .masthead-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .monogram {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--ink);
+      display: grid;
+      place-items: center;
+      font-family: var(--serif);
+      font-size: 15px;
+      font-weight: 700;
+      background: #fff;
+      flex-shrink: 0;
     }
 
     .masthead a {
@@ -79,12 +99,11 @@
       gap: 16px;
     }
 
-    /* hero */
     .hero {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
       gap: 40px;
-      padding: 56px 0 48px;
+      padding: 48px 0 40px;
       border-bottom: 1px solid var(--line);
     }
 
@@ -141,17 +160,12 @@
       color: #fff;
     }
 
-    .cta:hover:not(.cta-primary) {
-      background: var(--paper-2);
-    }
+    .cta:hover:not(.cta-primary) { background: var(--paper-2); }
 
-    .hero-aside {
-      align-self: end;
-    }
+    .hero-aside { align-self: end; }
 
     .fact-sheet {
       border: 2px solid var(--ink);
-      padding: 0;
       background: #fff;
     }
 
@@ -176,11 +190,60 @@
     }
 
     .fact-sheet dt:last-of-type,
-    .fact-sheet dd:last-of-type {
-      border-bottom: none;
+    .fact-sheet dd:last-of-type { border-bottom: none; }
+
+    .pullquote {
+      margin: 0 -24px;
+      padding: 28px 24px;
+      background: var(--sage);
+      border-top: 1px solid #b8cfc0;
+      border-bottom: 1px solid #b8cfc0;
+      text-align: center;
     }
 
-    /* sections */
+    .pullquote p {
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-style: italic;
+      color: var(--sage-ink);
+      max-width: 28em;
+      margin: 0 auto;
+      line-height: 1.45;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 2px solid var(--ink);
+      background: #fff;
+      margin-bottom: 0;
+    }
+
+    .metric {
+      padding: 20px 16px;
+      text-align: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric:last-child { border-right: none; }
+
+    .metric strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 2rem;
+      line-height: 1;
+      color: var(--rust);
+      margin-bottom: 6px;
+    }
+
+    .metric span {
+      font-family: var(--mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+    }
+
     .block {
       padding: 48px 0;
       border-bottom: 1px solid var(--line);
@@ -206,7 +269,6 @@
       font-weight: 600;
     }
 
-    /* cases — not identical cards */
     .case {
       display: grid;
       grid-template-columns: 72px 1fr;
@@ -267,17 +329,74 @@
       color: var(--ink-soft);
     }
 
-    /* repos — typewriter list */
+    .case a { color: var(--ink); }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 4px;
+      margin: 20px 0 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .flow-box {
+      padding: 8px 12px;
+      border: 1.5px solid var(--ink);
+      background: #fff;
+    }
+
+    .flow-box.accent {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .flow-arrow { color: var(--rust); padding: 0 2px; }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .code-panel {
+      border: 2px solid var(--ink);
+      background: #1c1917;
+      color: #e7e0d6;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.65;
+      overflow-x: auto;
+    }
+
+    .code-panel header {
+      padding: 10px 14px;
+      border-bottom: 1px solid #3d3834;
+      font-size: 11px;
+      color: #9a918a;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .code-panel pre {
+      padding: 16px 14px;
+      margin: 0;
+    }
+
+    .tok-kw { color: #e8a87c; }
+    .tok-fn { color: #9ec8e8; }
+    .tok-str { color: #a8d4a0; }
+    .tok-cm { color: #7a756e; }
+
     .repo-list {
       list-style: none;
       border: 2px solid var(--ink);
       background: #fff;
     }
 
-    .repo-list li {
-      border-bottom: 1px solid var(--line);
-    }
-
+    .repo-list li { border-bottom: 1px solid var(--line); }
     .repo-list li:last-child { border-bottom: none; }
 
     .repo-list a {
@@ -288,9 +407,7 @@
       transition: background 0.12s;
     }
 
-    .repo-list a:hover {
-      background: var(--paper-2);
-    }
+    .repo-list a:hover { background: var(--paper-2); }
 
     .repo-list strong {
       font-family: var(--mono);
@@ -305,16 +422,14 @@
       color: var(--ink-soft);
     }
 
-    /* stack — inventory block */
     .inventory {
       font-family: var(--mono);
       font-size: 13px;
       line-height: 1.9;
-      columns: 2;
-      column-gap: 32px;
       background: var(--ink);
       color: #e8e2d8;
       padding: 24px 28px;
+      height: 100%;
     }
 
     .inventory span::before {
@@ -322,14 +437,63 @@
       color: var(--rust);
     }
 
-    @media (max-width: 600px) {
-      .inventory { columns: 1; }
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      position: relative;
     }
 
-    /* services — classified ads style */
+    .process::before {
+      content: "";
+      position: absolute;
+      top: 22px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: var(--line);
+      z-index: 0;
+    }
+
+    .step {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    .step-num {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 14px;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-family: var(--mono);
+      font-weight: 500;
+      background: var(--paper);
+      font-size: 14px;
+    }
+
+    .step:nth-child(2) .step-num { background: var(--rust-light); }
+    .step:nth-child(3) .step-num { background: var(--sage); }
+    .step:nth-child(4) .step-num { background: var(--ink); color: var(--paper); }
+
+    .step h4 {
+      font-family: var(--serif);
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+
     .classified {
       display: grid;
-      gap: 0;
       border: 2px solid var(--ink);
     }
 
@@ -359,7 +523,6 @@
       color: var(--ink-soft);
     }
 
-    /* contact */
     .contact-strip {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -389,24 +552,56 @@
       font-size: 14px;
       font-weight: 500;
       word-break: break-word;
+      text-decoration: none;
     }
 
     .contact-cell a:hover { color: var(--rust); }
 
-    footer {
+    .footer-row {
       margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    footer {
       font-family: var(--mono);
       font-size: 12px;
       color: var(--ink-soft);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
+      flex: 1;
+    }
+
+    .stamp {
+      width: 88px;
+      height: 88px;
+      border: 2px solid var(--rust);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--rust);
+      transform: rotate(-12deg);
+      line-height: 1.35;
+      flex-shrink: 0;
+      opacity: 0.85;
     }
 
     @media (max-width: 820px) {
       .hero { grid-template-columns: 1fr; gap: 28px; }
       .hero-aside { order: -1; }
+      .metrics { grid-template-columns: 1fr 1fr; }
+      .metric:nth-child(2) { border-right: none; }
+      .metric { border-bottom: 1px solid var(--line); }
+      .metric:nth-last-child(-n+2) { border-bottom: none; }
+      .split { grid-template-columns: 1fr; }
+      .process { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .process::before { display: none; }
       .classified-item { grid-template-columns: 1fr; }
       .classified-label { border-right: none; border-bottom: 1px solid var(--line); }
       .contact-strip { grid-template-columns: 1fr 1fr; }
@@ -417,19 +612,27 @@
     }
 
     @media (max-width: 480px) {
+      .metrics { grid-template-columns: 1fr; }
+      .metric { border-right: none !important; }
+      .process { grid-template-columns: 1fr; }
       .contact-strip { grid-template-columns: 1fr; }
       .contact-cell { border-right: none !important; }
       .masthead { flex-direction: column; align-items: flex-start; }
+      .pullquote { margin: 0; }
     }
   </style>
 </head>
 <body>
   <div class="page">
     <header class="masthead">
-      <span>Кемерово · удалённо</span>
+      <div class="masthead-brand">
+        <div class="monogram" aria-hidden="true">МШ</div>
+        <span>Томск · UTC+7 · удалённо</span>
+      </div>
       <nav class="masthead-nav">
         <a href="#work">работы</a>
         <a href="#stack">стек</a>
+        <a href="#process">процесс</a>
         <a href="#contact">контакт</a>
         <a href="https://github.com/realReloadTime">github</a>
       </nav>
@@ -441,7 +644,7 @@
         <p class="hero-lead">
           Пишу async API на Python — не демо на YouTube, а сервисы с миграциями, тестами и деплоем.
           Сооснователь <a href="https://недвижь.рф">недвижь.рф</a> (маркетплейс недвижимости, Кузбасс).
-          Беру заказы: FastAPI, боты, RAG, интеграции с оплатой.
+          Студент в Томске, параллельно веду стартап и беру фриланс.
         </p>
         <div class="cta-row">
           <a class="cta cta-primary" href="https://t.me/realReloadTime">Telegram</a>
@@ -463,6 +666,29 @@
       </aside>
     </section>
 
+    <blockquote class="pullquote">
+      <p>Хороший API — это когда фронтендер не пишет «а можно ещё поле?» третий раз за спринт.</p>
+    </blockquote>
+
+    <div class="metrics" aria-label="Цифры">
+      <div class="metric">
+        <strong>30+</strong>
+        <span>модулей API</span>
+      </div>
+      <div class="metric">
+        <strong>36+</strong>
+        <span>автотестов</span>
+      </div>
+      <div class="metric">
+        <strong>3</strong>
+        <span>клиента (web / iOS / Android)</span>
+      </div>
+      <div class="metric">
+        <strong>2</strong>
+        <span>года на GitHub</span>
+      </div>
+    </div>
+
     <section class="block" id="work">
       <div class="block-head">
         <span class="block-num">01</span>
@@ -476,13 +702,24 @@
           Региональный маркетплейс недвижимости: каталог, чаты между покупателем и продавцом,
           модерация, подписки, оплата через банк. Web + Flutter + один async-бэкенд.
         </p>
+        <div class="flow" aria-hidden="true">
+          <span class="flow-box">Vue / Flutter</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box accent">FastAPI</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-box">PostgreSQL</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-box">T-Bank</span>
+          <span class="flow-arrow">+</span>
+          <span class="flow-box">pgvector</span>
+        </div>
         <ul>
           <li>30+ модулей API, SQLAlchemy 2.0, Alembic</li>
-          <li>Поиск: PostgreSQL FTS + pgvector (embeddings)</li>
-          <li>WebSocket-чат, T-Bank, JWT и OAuth</li>
-          <li>36+ pytest, Docker, blue-green</li>
+          <li>Поиск: PostgreSQL FTS + embeddings</li>
+          <li>WebSocket-чат, JWT и OAuth</li>
+          <li>Docker, blue-green deploy</li>
         </ul>
-        <p class="case-meta">FastAPI · PostgreSQL · Vue · Flutter</p>
+        <p class="case-meta">недвижь.рф · FastAPI · PostgreSQL · Vue · Flutter</p>
       </article>
 
       <article class="case">
@@ -513,7 +750,7 @@
 
       <div class="block-head" style="margin-top: 40px; margin-bottom: 16px;">
         <span class="block-num">→</span>
-        <h2 class="block-title" style="font-size: 1.1rem;">Репозитории для просмотра кода</h2>
+        <h2 class="block-title" style="font-size: 1.1rem;">Код в открытом доступе</h2>
       </div>
       <ul class="repo-list">
         <li>
@@ -534,25 +771,71 @@
     <section class="block" id="stack">
       <div class="block-head">
         <span class="block-num">02</span>
-        <h2 class="block-title">Инструменты</h2>
+        <h2 class="block-title">Стек и как пишу</h2>
       </div>
-      <div class="inventory">
-        <span>Python 3.12</span><br>
-        <span>FastAPI · Pydantic v2</span><br>
-        <span>SQLAlchemy 2.0 async</span><br>
-        <span>PostgreSQL · asyncpg</span><br>
-        <span>Alembic · pgvector</span><br>
-        <span>JWT · OAuth2 · WebSockets</span><br>
-        <span>Docker · pytest</span><br>
-        <span>python-telegram-bot</span><br>
-        <span>LangChain · RAG · Chroma</span><br>
-        <span>PyTorch · httpx · aiohttp</span>
+      <div class="split">
+        <div class="inventory">
+          <span>Python 3.12</span><br>
+          <span>FastAPI · Pydantic v2</span><br>
+          <span>SQLAlchemy 2.0 async</span><br>
+          <span>PostgreSQL · asyncpg</span><br>
+          <span>Alembic · pgvector</span><br>
+          <span>JWT · OAuth2 · WebSockets</span><br>
+          <span>Docker · pytest</span><br>
+          <span>LangChain · RAG · Chroma</span><br>
+          <span>PyTorch · httpx</span>
+        </div>
+        <div class="code-panel">
+          <header>паттерн из реальных проектов</header>
+          <pre><span class="tok-cm"># router → service → repository</span>
+<span class="tok-kw">async def</span> <span class="tok-fn">create_task</span>(
+    payload: TaskCreate,
+    user: User = Depends(require_current_user),
+):
+    <span class="tok-kw">return await</span> task_service.create(
+        owner_id=user.id, **payload.model_dump()
+    )
+
+<span class="tok-cm"># async session, без sync ORM в 2026</span>
+<span class="tok-kw">async with</span> get_async_session() <span class="tok-kw">as</span> session:
+    session.add(entity)
+    <span class="tok-kw">await</span> session.flush()</pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="process">
+      <div class="block-head">
+        <span class="block-num">03</span>
+        <h2 class="block-title">Как идёт проект</h2>
+      </div>
+      <div class="process">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Созвон</h4>
+          <p>15 минут, фиксируем scope: что делаем и что точно не делаем</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>КП</h4>
+          <p>Срок, этапы, цена. Аванс — и стартуем</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>Разработка</h4>
+          <p>Демо на тесте, промежуточные апдейты в Telegram</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h4>Сдача</h4>
+          <p>Код, README, Swagger. 7 дней на баги в scope</p>
+        </div>
       </div>
     </section>
 
     <section class="block">
       <div class="block-head">
-        <span class="block-num">03</span>
+        <span class="block-num">04</span>
         <h2 class="block-title">Что делаю на заказ</h2>
       </div>
       <div class="classified">
@@ -573,7 +856,7 @@
 
     <section class="block" id="contact">
       <div class="block-head">
-        <span class="block-num">04</span>
+        <span class="block-num">05</span>
         <h2 class="block-title">Написать</h2>
       </div>
       <div class="contact-strip">
@@ -596,10 +879,13 @@
       </div>
     </section>
 
-    <footer>
-      <span>© 2026</span>
-      <span>Отвечаю в Telegram быстрее, чем на почту</span>
-    </footer>
+    <div class="footer-row">
+      <footer>
+        <span>© 2026 · Томск</span><br>
+        <span style="margin-top: 4px; display: inline-block;">Отвечаю в Telegram быстрее, чем на почту</span>
+      </footer>
+      <div class="stamp" aria-hidden="true">Томск<br>2026<br>backend</div>
+    </div>
   </div>
 </body>
 </html>
